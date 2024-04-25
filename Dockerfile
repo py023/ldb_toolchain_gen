@@ -2,54 +2,54 @@ FROM ubuntu:18.04 AS generator
 
 # Cannot use 20.04 with glibc 2.30 because of pthread_cond_clockwait etc.
 
-ENV DEBIAN_FRONTEND=noninteractive GCC_VERSION=13 ARCH=x86_64
+ENV DEBIAN_FRONTEND=noninteractive GCC_VERSION=13 ARCH=aarch64
 
 RUN apt-get update \
     && apt-get install ca-certificates lsb-release wget gnupg apt-transport-https software-properties-common \
-        --yes --no-install-recommends --verbose-versions
+    --yes --no-install-recommends --verbose-versions
 
 RUN add-apt-repository -y ppa:ubuntu-toolchain-r/test
 
 RUN apt-get update \
     && apt-get install \
-        g++-${GCC_VERSION} \
-        ninja-build \
-        pkg-config \
-        tzdata \
-        python3-pip \
-        python-dev \
-        musl-tools \
-        binutils-dev \
-        libiberty-dev \
-        build-essential \
-        fakeroot \
-        dpkg-dev \
-        git \
-        flex \
-        autoconf \
-        gdb \
-        google-perftools \
-        libssl-dev \
-        gettext \
-        file \
-        quilt \
-        gawk \
-        debhelper \
-        rdfind \
-        symlinks \
-        netbase \
-        gperf \
-        bison \
-        systemtap-sdt-dev \
-        libaudit-dev \
-        libcap-dev \
-        libselinux-dev \
-        po-debconf \
-        yasm \
-        rsync \
-        libltdl7 \
-        vim \
-        --yes --no-install-recommends
+    g++-${GCC_VERSION} \
+    ninja-build \
+    pkg-config \
+    tzdata \
+    python3-pip \
+    python-dev \
+    musl-tools \
+    binutils-dev \
+    libiberty-dev \
+    build-essential \
+    fakeroot \
+    dpkg-dev \
+    git \
+    flex \
+    autoconf \
+    gdb \
+    google-perftools \
+    libssl-dev \
+    gettext \
+    file \
+    quilt \
+    gawk \
+    debhelper \
+    rdfind \
+    symlinks \
+    netbase \
+    gperf \
+    bison \
+    systemtap-sdt-dev \
+    libaudit-dev \
+    libcap-dev \
+    libselinux-dev \
+    po-debconf \
+    yasm \
+    rsync \
+    libltdl7 \
+    vim \
+    --yes --no-install-recommends
 
 RUN if [ "${ARCH}" = "x86_64" ] ; then apt-get install g++-7-multilib --yes --no-install-recommends; fi
 
@@ -111,16 +111,16 @@ RUN echo "deb [trusted=yes] http://apt.llvm.org/bionic/ llvm-toolchain-bionic-${
 
 RUN apt-get update \
     && apt-get install \
-        llvm-${LLVM_VERSION}-dev \
-        clang-${LLVM_VERSION} \
-        clang-format-${LLVM_VERSION} \
-        clang-tidy-${LLVM_VERSION} \
-        lld-${LLVM_VERSION} \
-        lldb-${LLVM_VERSION} \
-        libc++-${LLVM_VERSION}-dev libc++abi-${LLVM_VERSION}-dev \
-        clangd-${LLVM_VERSION} \
-        libclang-rt-${LLVM_VERSION}-dev \
-        --yes --no-install-recommends
+    llvm-${LLVM_VERSION}-dev \
+    clang-${LLVM_VERSION} \
+    clang-format-${LLVM_VERSION} \
+    clang-tidy-${LLVM_VERSION} \
+    lld-${LLVM_VERSION} \
+    lldb-${LLVM_VERSION} \
+    libc++-${LLVM_VERSION}-dev libc++abi-${LLVM_VERSION}-dev \
+    clangd-${LLVM_VERSION} \
+    libclang-rt-${LLVM_VERSION}-dev \
+    --yes --no-install-recommends
 
 RUN wget https://raw.githubusercontent.com/llvm/llvm-project/llvmorg-$(/usr/lib/llvm-${LLVM_VERSION}/bin/clang --version  | head -n 1 | awk '{print $4}')/libcxx/utils/gdb/libcxx/printers.py -O /opt/printers.py
 
